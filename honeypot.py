@@ -4,6 +4,15 @@ import subprocess
 import os
 import socket
 import random
+import netuse
+
+
+def map_drive(path):
+    netuse.mapNetDrive(path)
+   
+
+def remove_drive(path):
+    netuse.removeNetDrive(path)
 
 
 def initiate(ip, port):
