@@ -3,9 +3,15 @@ import os
 import win32file
 import win32con
 import getpass
+from datetime import datetime
 
 
-def main():
+def share(path):
+    os.system("runas net share sharename=" + path + " /GRANT:everyone,FULL")
+
+
+def monitor(path):
+    print path
     ACTIONS = {
         1: "Created",
         2: "Deleted",
@@ -13,7 +19,7 @@ def main():
         4: "Renamed from something",
         5: "Renamed to something"}
     FILE_LIST_DIRECTORY = 0x0001
-    path_to_watch = "C:\s"
+    path_to_watch = path
     hDir = win32file.CreateFile(
     path_to_watch,
     FILE_LIST_DIRECTORY,
@@ -40,9 +46,13 @@ def main():
             #full_filename = os.path.join(path_to_watch, files)
             full_filename = os.getcwd()
             with open("msgs.txt", "a") as log_file:
-                log_file.write((getpass.getuser()) + ACTIONS.get(action, "Unknown") + ' in ' + full_filename + '\n')
+                log_file.write((getpass.getuser()) + ACTIONS.get(action, "Unknown") + ' in ' + full_filename + ' on ' + \
+                               str(datetime.now()) + '\n')
             #print full_filename, ACTIONS.get(action, "Unknown")
 
+
+def main():
+    return 0
 
 if __name__ == '__main__':
     main()
