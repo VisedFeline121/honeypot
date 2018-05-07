@@ -7,7 +7,8 @@ from datetime import datetime
 
 
 def share(path):
-    os.system("runas net share sharename=" + path + " /GRANT:everyone,FULL")
+    sharename = path.split('\\')[-1]
+    os.system("net share " + sharename + "=" + path + " /GRANT:everyone,FULL")
 
 
 def monitor(path):
