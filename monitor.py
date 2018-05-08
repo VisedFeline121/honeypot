@@ -49,7 +49,6 @@ def monitor(path):
             with open("msgs.txt", "a") as log_file:
                 log_file.write((getpass.getuser()) + ACTIONS.get(action, "Unknown") + ' in ' + full_filename + ' on ' + \
                                str(datetime.now()) + '\n')
-            #print full_filename, ACTIONS.get(action, "Unknown")
 
 
 def main():
