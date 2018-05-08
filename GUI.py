@@ -5,25 +5,18 @@ import moni
 
 
 def main():
-#    def get_info():
-#        project_new.get_info(ip.get())
 
     def monitor_folder():
-        moni.monitor(path.get())
-
-    #def stop():
-     #   honeypot_script.stop()
+        monitor.monitor(path.get())
 
     def share():
-        moni.share(share_path.get())
+        monitor.share(share_path.get())
 
     def cw():
         root.destroy()
         exit()
 
     root = Tk()  # creates interface
-
-    # root.iconbitmap('honeypot.ico')  # creates logo
 
     root.title("Office Honeypot")  # creates title
 
@@ -46,7 +39,7 @@ def main():
     path = Entry(root, width=20, bg="white")
     path.grid(row=5, column=0, sticky=W)  # stores folder path
 
-    Button(root, text="MONITOR FOLDER", width=15, command=monitor).grid(row=6, column=0, sticky=W)
+    Button(root, text="MONITOR FOLDER", width=15, command=monitor_folder).grid(row=6, column=0, sticky=W)
 
     Button(root, text="STOP MONITORING FOLDER", width=22).grid(row=7, column=0, sticky=W)
 
