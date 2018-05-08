@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from Tkinter import *
 import monitor
+import moni
 
 
 def main():
@@ -8,13 +9,13 @@ def main():
 #        project_new.get_info(ip.get())
 
     def monitor_folder():
-        monitor.monitor(path.get())
+        moni.monitor(path.get())
 
     #def stop():
      #   honeypot_script.stop()
 
     def share():
-        monitor.share(share_path.get())
+        moni.share(share_path.get())
 
     def cw():
         root.destroy()
