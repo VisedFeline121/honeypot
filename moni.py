@@ -9,7 +9,7 @@ from watchdog.events import FileSystemEventHandler
 
 def share(path):
     sharename = path.split('\\')[-1]
-    os.system("net share " + sharename + "=" + path + " /GRANT:everyone,FULL")
+    os.system("runas /user:%userdomain%\%username% net share " + sharename + "=" + path + " /GRANT:everyone,FULL")
 
 
 class Watcher:
