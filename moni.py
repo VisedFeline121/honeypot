@@ -7,11 +7,12 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 
-def share(path):
+def share(path, password):
     sharename = path.split('\\')[-1]
-    os.system("runas /user:%userdomain%\%username% net share " + sharename + "=" + path + " /GRANT:everyone,FULL")
+    os.system("runas /user:%userdomain%\%username% " + r'"net share ' + sharename + "=" + path + r' /GRANT:everyone,FULL"')
+    os.system(password)
 
-
+    
 class Watcher:
     def __init__(self, path):
         self.observer = Observer()
