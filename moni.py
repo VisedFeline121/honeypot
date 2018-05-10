@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import getpass
-import os
-from datetime import datetime
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import logging
+LOG_FILENAME = 'events.log'
 
 
 def share(path, password):
@@ -12,13 +12,23 @@ def share(path, password):
     os.system("start cmd")
     os.system("runas /user:%userdomain%\%username% " + r'"net share ' + sharename + "=" + path + r' /GRANT:everyone,FULL"')
     #os.system(password)
+    
+
+def logi():
+    logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+    logging.debug('debug')
+
+logging.info('This is an info message')
+
+def get_my_ip():
+    return getpass.getuser()
 
 
 class Watcher:
     def __init__(self, path):
         self.observer = Observer()
         self.path = path
-        print self.path
+        print(self.path)
 
     def run(self):
         event_handler = Handler()
@@ -29,36 +39,62 @@ class Watcher:
                 time.sleep(5)
         except:
             self.observer.stop()
-            print "Error"
+            print("Error")
 
         self.observer.join()
 
 
 class Handler(FileSystemEventHandler):
-    # @staticmethod
+    @staticmethod
     def on_any_event(event):
-        action = ''
-        if event.is_directory:
-            if event.event_type == 'created':
-                action = ' created '
-            elif event.event_type == 'deleted':
-                action = ' deleted '
-            else:
-                action = ''
-            with open("msgs.txt", "a") as log_file:
-                log_file.write((getpass.getuser()) + action + ' in ' + os.getcwd() + ' on ' + \
-                               str(datetime.now()) + '\n')
-        elif event.event_type == 'created':
-            action = ' created '
+
+        if event.event_type == 'created':
+            path_event = event.src_path
+            time_mow = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+            print time_mow,
+            print ": {}: ".format(get_my_ip()),
+            print "Received created event - %s." % path_event
+            logging.info(time_mow)
+            logging.info(get_my_ip() + " ,  " + path_event)
+            logging.info("\n")
+
         elif event.event_type == 'deleted':
-            action = ' deleted '
+            path_event = event.src_path
+            time_mow = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+            print time_mow,
+            print ": {}: ".format(get_my_ip()),
+            print "Received deleted event - %s." % path_event
+            logging.info(time_mow)
+            logging.info(get_my_ip() + " ,  " + path_event)
+            logging.info("\n")
+
         elif event.event_type == 'modified':
-            action = ' modified '
-        with open("msgs.txt", "a") as log_file:
-                log_file.write((getpass.getuser()) + action + ' in ' + os.getcwd() + ' on ' + \
-                               str(datetime.now()) + '\n')
+            path_event = event.src_path
+            time_mow = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+            print time_mow,
+            print ": {}: ".format(get_my_ip()),
+            print "Received modified event - %s." % path_event
+            logging.info(time_mow)
+            logging.info(get_my_ip() + " ,  " + path_event)
+            logging.info("\n")
+
+        elif event.event_type == 'moved':
+            path_event = event.src_path
+            time_mow = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+            print time_mow,
+            print ": {}: ".format(get_my_ip()),
+            print "Received moved event - "+path_event+" to "+event.dest_path
+            logging.info(time_mow)
+            logging.info(get_my_ip() + " ,  " + path_event)
+            logging.info("\n")
+
+        else:
+            return None
 
 
-def monitor(path=r'C:\s'):
-    w = Watcher(path)
+if __name__ == "__main__":
+    logi()
+    #path1 = r"c:\tasm\bin"
+    path1 = raw_input("your path Blat: ")
+    w = Watcher(path1)
     w.run()
