@@ -446,8 +446,9 @@ def get_command_args(request):
 
 
 class Server(Commands):
-    def __init__(self, port, logger, my_ip=socket.gethostbyname(socket.gethostname())):
+    def __init__(self, port, logger, path, my_ip=socket.gethostbyname(socket.gethostname())):
         super(Server, self).__init__(my_ip)
+        self.path = path
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.bind(("0.0.0.0", port))
         self.server_socket.listen(1)
@@ -458,7 +459,7 @@ class Server(Commands):
         self.online = True
 
     def run(self):
-        os.chdir('important_files')
+        os.chdir(self.path)
         while self.online: # can also add here max number of connections
             client, address = self.server_socket.accept()
             client.send('220 welcome\r\n')
