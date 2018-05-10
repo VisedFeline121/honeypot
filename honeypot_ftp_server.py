@@ -519,7 +519,8 @@ class Server(Commands):
 def main():
     print os.system('netstat -an')
     port = input("choose port to set up honeypot server: ")
-    s = Server(port, None)
+    path = raw_input("choose dir: ")
+    s = Server(port, path, None)
     s.run()
 
 
