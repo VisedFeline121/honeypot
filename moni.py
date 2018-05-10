@@ -9,10 +9,11 @@ from watchdog.events import FileSystemEventHandler
 
 def share(path, password):
     sharename = path.split('\\')[-1]
+    os.system("start cmd")
     os.system("runas /user:%userdomain%\%username% " + r'"net share ' + sharename + "=" + path + r' /GRANT:everyone,FULL"')
-    os.system(password)
+    #os.system(password)
 
-    
+
 class Watcher:
     def __init__(self, path):
         self.observer = Observer()
@@ -34,8 +35,9 @@ class Watcher:
 
 
 class Handler(FileSystemEventHandler):
-    @staticmethod
+    # @staticmethod
     def on_any_event(event):
+        action = ''
         if event.is_directory:
             if event.event_type == 'created':
                 action = ' created '
@@ -52,8 +54,11 @@ class Handler(FileSystemEventHandler):
             action = ' deleted '
         elif event.event_type == 'modified':
             action = ' modified '
+        with open("msgs.txt", "a") as log_file:
+                log_file.write((getpass.getuser()) + action + ' in ' + os.getcwd() + ' on ' + \
+                               str(datetime.now()) + '\n')
 
 
-def monitor(patg):
+def monitor(path=r'C:\s'):
     w = Watcher(path)
     w.run()
